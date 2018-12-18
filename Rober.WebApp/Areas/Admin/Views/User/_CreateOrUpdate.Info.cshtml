@@ -1,0 +1,137 @@
+﻿@model UserModel
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#AllowsToSelectPageSize").click(togglePageSize);
+        togglePageSize();
+    });
+
+    function togglePageSize() {
+        if ($('#AllowsToSelectPageSize').is(':checked')) {
+            $('#pnlPageSize').hide();
+            $('#pnlPageSizeOptions').show();
+        } else {
+            $('#pnlPageSize').show();
+            $('#pnlPageSizeOptions').hide();
+        }
+    }
+</script>
+<div class="panel-group">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="@Model.UserName" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-editor asp-for="@Model.UserName"  asp-required="true"/>
+                        <span asp-validation-for="@Model.UserName"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="@Model.NickName" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-editor asp-for="@Model.NickName" asp-required="true"/>
+                        <span asp-validation-for="@Model.NickName"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="Password"/>
+                    </div>
+                    <div class="col-md-9">
+                        <jm-editor asp-for="Password"/>
+                        <div class="input-group-btn">
+                            @if (Model.Id > 0)
+                            {
+                                <button type="submit" name="changepassword" class="btn btn-info">
+                                    修改密码
+                                </button>
+                            }
+                        </div>
+                        <span asp-validation-for="Password"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="SelectedRoleIds" />
+                    </div>
+                    <div class="col-md-9">
+
+                        <div class="input-group input-group-required">
+                            <jm-select asp-for="SelectedRoleIds" asp-items="Model.AvailableRoles" asp-multiple="true" asp-required="true" />
+                            @*<div class="input-group-btn">
+                                <jm-required />
+                            </div>*@
+                        </div>
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                var rolesIdsInput = $('#@Html.IdFor(model => model.SelectedRoleIds)')
+                                    .data("kendoMultiSelect");
+                                rolesIdsInput.setOptions({
+                                    rolesIdsInput: false,
+                                    filter: "contains"
+                                });
+
+                                @if (Model.AvailableRoles.Count == 0) {
+                                    <text>
+                                        rolesIdsInput.setOptions({
+                                            enable: false,
+                                            placeholder: 'No roles'
+                                        });
+                                        rolesIdsInput._placeholder();
+                                        rolesIdsInput._enable();
+                                    </text>
+                                }
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="SelectedDepartmentIds" />
+                    </div>
+                    <div class="col-md-9">
+
+                        <div class="input-group input-group-required">
+                            <jm-select asp-for="SelectedDepartmentIds" asp-items="Model.AvailableDepartments" asp-multiple="true" asp-required="true" />
+                        </div>
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                var departmentsIdsInput = $('#@Html.IdFor(model => model.SelectedDepartmentIds)')
+                                    .data("kendoMultiSelect");
+                                departmentsIdsInput.setOptions({
+                                    departmentsIdsInput: false,
+                                    filter: "contains"
+                                });
+
+                                @if (Model.AvailableDepartments.Count == 0) {
+                                    <text>
+                                        departmentsIdsInput.setOptions({
+                                            enable: false,
+                                            placeholder: 'No Departments'
+                                        });
+                                        departmentsIdsInput._placeholder();
+                                        departmentsIdsInput._enable();
+                                    </text>
+                                }
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="form-group @(Model.Published ? null : " advanced-setting")">
+                    <div class="col-md-3">
+                        <jm-label asp-for="Published" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-editor asp-for="Published" />
+                        <span asp-validation-for="Published"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

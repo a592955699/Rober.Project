@@ -1,0 +1,15 @@
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\bin\Debug\netcoreapp2.1\Rober.ServerApp.Framework.deps.json
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\bin\Debug\netcoreapp2.1\Rober.ServerApp.Framework.dll
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\bin\Debug\netcoreapp2.1\Rober.ServerApp.Framework.pdb
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\bin\Debug\netcoreapp2.1\Rober.Core.dll
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\bin\Debug\netcoreapp2.1\Rober.DAL.dll
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\bin\Debug\netcoreapp2.1\Rober.IDAL.dll
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\bin\Debug\netcoreapp2.1\Rober.Core.pdb
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\bin\Debug\netcoreapp2.1\Rober.DAL.pdb
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\bin\Debug\netcoreapp2.1\Rober.IDAL.pdb
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\obj\Debug\netcoreapp2.1\Rober.ServerApp.Framework.csprojResolveAssemblyReference.cache
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\obj\Debug\netcoreapp2.1\Rober.ServerApp.Framework.csproj.CoreCompileInputs.cache
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\obj\Debug\netcoreapp2.1\Rober.ServerApp.Framework.AssemblyInfoInputs.cache
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\obj\Debug\netcoreapp2.1\Rober.ServerApp.Framework.AssemblyInfo.cs
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\obj\Debug\netcoreapp2.1\Rober.ServerApp.Framework.dll
+F:\Work\gduccc\Rober.Project\Rober.ServerApp.Framework\obj\Debug\netcoreapp2.1\Rober.ServerApp.Framework.pdb

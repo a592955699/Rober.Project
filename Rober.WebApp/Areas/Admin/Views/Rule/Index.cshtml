@@ -1,0 +1,314 @@
+﻿@{
+    var defaultGridPageSize = 10;
+    var gridPageSizes = "10,20,50,100";
+    Html.SetActiveMenuItemSystemName("角色管理");
+}
+@model RuleListModel
+
+<div>
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            角色列表
+        </h1>
+        @*<div class="pull-right">
+                <a class="btn bg-blue" href="/Admin/Rule/Create">
+                    <i class="fa fa-plus-square"></i>
+                    Add new
+                </a>
+                <button type="button" id="delete-selected" class="btn bg-red">
+                    <i class="fa fa-trash-o"></i>
+                    Delete (selected)
+                </button>
+            </div>*@
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="panel-group">
+                <div class="panel panel-default panel-search">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <jm-label asp-for="Name" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <jm-editor asp-for="Name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <jm-label asp-for="PublishedId" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <jm-select asp-for="PublishedId" asp-items="Model.AvailablePublishedOptions" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7 col-md-offset-5">
+                                <button type="button" id="search-products" class="btn btn-primary btn-search">
+                                    <i class="fa fa-search"></i>
+                                    查询
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="rule-grid"></div>
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                var dataSource = new kendo.data.DataSource({
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Url.Action("Read")",
+                                            type: "GET",
+                                            contentType: "application/json",
+                                            dataType: "json",
+                                            data: additionalData
+                                        },
+                                        update: {
+                                            url: "@Url.Action("Update")",
+                                            type: "POST",
+                                            contentType: "application/json",
+                                            dataType: "json"
+                                        },
+                                        destroy: {
+                                            url: "@Url.Action("Destroy")",
+                                            type: "POST",
+                                            contentType: "application/json",
+                                            dataType: "json"
+                                        },
+                                        create: {
+                                            url: "@Url.Action("Create")",
+                                            type: "POST",
+                                            contentType: "application/json",
+                                            dataType: "json"
+                                        },
+                                        parameterMap: function (options, operation) {
+                                            if (operation !== "read") {
+                                                if (options.models) 
+                                                    return JSON.stringify(options.models);
+                                                else
+                                                    return JSON.stringify(options);
+                                            } else {
+                                                return options;
+                                            }
+                                        }
+                                    },
+                                    schema: {
+                                        errors: function (response) {
+                                            if (response.Status) {
+                                                return response.Data.Errors;
+                                            } else {
+                                                return response.Code + " " + response.Message;
+                                            }
+                                        },
+                                        data: "Data.Data",
+                                        total: "Data.Total",
+                                        model: {
+                                            id: "Id",
+                                            fields: {
+                                                Id: { editable: false, nullable: false, type: "int" },
+                                                Name: { validation: { required: true } },
+                                                Published: { type: "boolean" }
+                                            }
+                                        }
+                                    },
+                                    error: function (e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    },
+                                    batch: false,
+                                    pageSize:  @(defaultGridPageSize),
+                                    serverPaging: true,
+                                    serverFiltering: true,
+                                    serverSorting: true
+                                });
+                                var grid = $("#rule-grid").kendoGrid({
+                                    dataSource: dataSource,
+                                    columns: [
+                                        {
+                                            field: "Id",
+                                            //headerTemplate: "<input id='mastercheckbox' type='checkbox'/>",
+                                            headerAttributes: { style: "text-align:center" },
+                                            //template: "<input type='checkbox' value='#=Id#' class='checkboxGroups'/>",
+                                            attributes: { style: "text-align:center" },
+                                            width: 50
+                                        }, {
+                                            field: "Name",
+                                            title: "角色名称"
+                                        }, {
+                                            field: "Published",
+                                            title: "是否发布",
+                                            width: 100,
+                                            template: '# if(Published) {# <i class="fa fa-check true-icon"></i> #} else {# <i class="fa fa-close false-icon"></i> #} #'
+                                        },
+                                        {
+                                            command: [
+                                                //{
+                                                //    name: "edit",
+                                                //    text:"编辑"
+                                                //},
+                                                {
+                                                    text: "编辑",
+                                                    click: function (e) {
+                                                        // e.target 是表示按钮的DOM元素
+                                                        var tr = $(e.target).closest("tr"); // 得到当前表格的行 (tr)
+                                                        // 将数据绑定到当前表行。我们则可以通过data来取到这一行的数据了
+                                                        var data = this.dataItem(tr);
+                                                        //console.log("事件");
+                                                        //console.log(data.taskId);
+                                                        window.location.href = "/Admin/Rule/Edit/" + data.Id;
+                                                    }
+                                                },
+                                                {
+                                                    name: "destroy",
+                                                    text:"删除"
+                                                }
+                                            ],
+                                            title: "&nbsp;", width: "180px"
+                                        }
+                                    ], change: function (a, b, c, d, e) { // subscribe to the CHANGE event of the data source
+                                        $("#movies tbody").html(kendo.render(template, this.view())); // populate the table
+                                    },
+                                    pageable: {
+                                        refresh: true,
+                                        pageSizes: [@(gridPageSizes)],
+                                        @await Html.PartialAsync("_GridPagerMessages")
+                                    },
+                                    toolbar: [{ name: "create", text: "新增" }],
+                                    editable: {
+                                        confirmation: "确认删除?",
+                                        mode: "popup"
+                                    },
+                                    scrollable: false/*,
+                                    dataBound: onDataBound*/
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var selectedIds = [];
+
+        $(document).ready(function () {
+            //search button
+            $('#search-products').click(function () {
+                //search
+                var grid = $('#rule-grid').data('kendoGrid');
+                grid.dataSource.page(1); //new search. Set page size to 1
+                //grid.dataSource.read(); we already loaded the grid above using "page" function
+                //clear selected checkboxes
+                $('.checkboxGroups').attr('checked', false).change();
+                selectedIds = [];
+                return false;
+            });
+
+            //$("#SearchProductName").keydown(function (event) {
+            //    if (event.keyCode === 13) {
+            //        $("#search-products").click();
+            //        return false;
+            //    }
+            //});
+
+            //$("#GoDirectlyToSku").keydown(function (event) {
+            //    if (event.keyCode === 13) {
+            //        $("#go-to-product-by-sku").click();
+            //        return false;
+            //    }
+            //});
+            ////delete selected
+            //$('#delete-selected').click(function (e) {
+            //    e.preventDefault();
+
+            //    var postData = {
+            //        selectedIds: selectedIds
+            //    };
+            //    addAntiForgeryToken(postData);
+
+            //    $.ajax({
+            //        cache: false,
+            //        type: "POST",
+            //        url: "/Admin/Product/DeleteSelected",
+            //        data: postData,
+            //        complete: function (data) {
+            //            //reload grid
+            //            var grid = $('#rule-grid').data('kendoGrid');
+            //            grid.dataSource.read();
+            //        },
+            //        error: function (xhr, ajaxOptions, thrownError) {
+            //            alert(thrownError);
+            //        },
+            //        traditional: true
+            //    });
+            //    return false;
+            //});
+
+            //$('#mastercheckbox').click(function () {
+            //    $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+            //});
+
+            ////wire up checkboxes.
+            //$('#rule-grid').on('change', 'input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]', function (e) {
+            //    var $check = $(this);
+            //    if ($check.is(":checked") == true) {
+            //        var checked = jQuery.inArray($check.val(), selectedIds);
+            //        if (checked == -1) {
+            //            //add id to selectedIds.
+            //            selectedIds.push($check.val());
+            //        }
+            //    }
+            //    else {
+            //        var checked = jQuery.inArray($check.val(), selectedIds);
+            //        if (checked > -1) {
+            //            //remove id from selectedIds.
+            //            selectedIds = $.grep(selectedIds, function (item, index) {
+            //                return item != $check.val();
+            //            });
+            //        }
+            //    }
+            //    updateMasterCheckbox();
+            //});
+        });
+
+        function additionalData() {
+            var data = {
+                Name: $('#Name').val(),
+                PublishedId: $('#PublishedId').val()
+            };
+            addAntiForgeryToken(data);
+            return data;
+        }
+
+        //function onDataBound(e) {
+        //    $('#rule-grid input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]').each(function () {
+        //        var currentId = $(this).val();
+        //        var checked = jQuery.inArray(currentId, selectedIds);
+        //        //set checked based on if current checkbox's value is in selectedIds.
+        //        $(this).attr('checked', checked > -1);
+        //    });
+
+        //    updateMasterCheckbox();
+        //}
+
+        //function updateMasterCheckbox() {
+        //    var numChkBoxes = $('#rule-grid input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]').length;
+        //    var numChkBoxesChecked = $('#rule-grid input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]:checked').length;
+        //    $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+        //}
+    </script>
+</div>

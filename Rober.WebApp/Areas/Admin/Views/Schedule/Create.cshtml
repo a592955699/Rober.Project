@@ -1,0 +1,30 @@
+﻿@model ScheduleModel
+@{
+    var scheduleCategoryName = Model.ScheduleCategory.ScheduleCategoryName();
+    //page title
+    ViewBag.Title = "新增" + scheduleCategoryName;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName(Model.ScheduleCategory.ScheduleCategoryName());
+}
+<form asp-controller="Schedule" asp-action="Create" asp-route-ScheduleCategory="@((int)Model.ScheduleCategory)" method="post">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            新增@(scheduleCategoryName)
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a asp-action="Index" asp-controller="Schedule" asp-route-ScheduleCategory="@((int)Model.ScheduleCategory)">返回列表</a>
+            </small>
+        </h1>
+        <div class="pull-right">
+            <button type="submit" name="save" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                保存
+            </button>
+            <button type="submit" name="save-continue" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                保存并继续编辑
+            </button>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdate", Model)
+</form>

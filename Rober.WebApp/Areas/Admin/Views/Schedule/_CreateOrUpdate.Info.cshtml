@@ -1,0 +1,100 @@
+﻿@model ScheduleModel
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#AllowsToSelectPageSize").click(togglePageSize);
+        togglePageSize();
+    });
+
+    function togglePageSize() {
+        if ($('#AllowsToSelectPageSize').is(':checked')) {
+            $('#pnlPageSize').hide();
+            $('#pnlPageSizeOptions').show();
+        } else {
+            $('#pnlPageSize').show();
+            $('#pnlPageSizeOptions').hide();
+        }
+    }
+</script>
+<div class="panel-group">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="SubCategoryId" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-select asp-for="SubCategoryId" asp-items="Model.AvailableSubScheduleCategorys" />
+                        <span asp-validation-for="SubCategoryId"></span>
+                        @Html.HiddenFor(x=>x.ScheduleCategory)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="StatusId" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-select asp-for="StatusId" asp-items="Model.AvailableStatus" />
+                        <span asp-validation-for="StatusId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="StartTime" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-editor asp-for="StartTime" asp-required="true" />
+                        <span asp-validation-for="StartTime"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="EndTime" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-editor asp-for="EndTime" asp-required="true" />
+                        <span asp-validation-for="EndTime"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="Title" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-editor asp-for="Title" asp-required="true" />
+                        <span asp-validation-for="Title"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="Content" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-textarea asp-for="Content" asp-required="true"/>
+                        <span asp-validation-for="Content"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="Common" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-textarea asp-for="Common" />
+                        <span asp-validation-for="Common"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="SelectedUserIds" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="input-group input-group-required">
+                            <jm-choice asp-for="SelectedUserIds" asp-items="Model.AvailableUsers" asp-multiple="true" asp-required="true" asp-url="/Admin/User/UserAddPopub"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

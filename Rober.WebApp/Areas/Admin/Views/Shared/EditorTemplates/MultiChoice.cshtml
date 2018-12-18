@@ -1,0 +1,56 @@
+﻿@model List<int>
+<select asp-for="@Model" asp-items="@((IEnumerable<SelectListItem>)ViewData["SelectList"])"></select>
+<script type="text/javascript">
+    var kendoSelect = {};
+    $(document).ready(function() {
+        kendoSelect = $("#@Html.IdForModel()").kendoMultiSelect({
+            dataTextField: "text",
+            dataValueField: "value",
+            select: function (e) {
+                var current = this.value();
+
+                if (this.dataSource.view()[e.item.index()].value === "0") {
+                    this.value("");
+                }
+                else if (current.indexOf("0") !== -1) {
+                    current = $.grep(current, function (value) {
+                        return value !== "0";
+                    });
+
+                    this.value(current);
+                }
+            },
+            change: function (e) {
+                if (this.value().length === 0)
+                    this.value(["0"]);
+            }
+            //,enable: false
+        }).data("kendoMultiSelect");
+    });
+    function Choice_@(Html.IdForModel())(data) {
+        var widget = $("#@Html.IdForModel()").getKendoMultiSelect();
+        var dataSource = widget.dataSource;
+
+        $.each(data, function (index, item) {
+            var exists = false;
+            $.each(dataSource.data(), function(index2, item2) {
+                if (item.value == item2.value) {
+                    exists = true;
+                    return false;
+                }
+            });
+            if (!exists) {
+                dataSource.add(item);
+                //widget.value(widget.value().concat(item.value));
+            }
+        });
+        dataSource.sync();
+
+        var dataIds = new Array();
+        $.each(dataSource.data(), function(index, item) {
+            dataIds.push(item.value);
+        });
+        widget.value(dataIds);
+        widget.refresh();
+    }
+</script>

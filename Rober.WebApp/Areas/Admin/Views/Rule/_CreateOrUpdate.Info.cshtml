@@ -1,0 +1,56 @@
+﻿@model RuleModel
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#AllowCustomersToSelectPageSize").click(togglePageSize);
+        togglePageSize();
+    });
+
+    function togglePageSize() {
+        if ($('#AllowCustomersToSelectPageSize').is(':checked')) {
+            $('#pnlPageSize').hide();
+            $('#pnlPageSizeOptions').show();
+        } else {
+            $('#pnlPageSize').show();
+            $('#pnlPageSizeOptions').hide();
+        }
+    }
+</script>
+<div class="panel-group">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="@Model.Name" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-editor asp-for="@Model.Name" />
+                        <span asp-validation-for="@Model.Name"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <jm-label asp-for="@Model.Remark" />
+                    </div>
+                    <div class="col-md-9">
+                        <jm-textarea asp-for="@Model.Remark" />
+                        <span asp-validation-for="@Model.Remark"></span>
+                    </div>
+                </div>
+
+                @*<div class="form-group advanced-setting">
+                    <div class="col-md-3">
+                        <div class="label-wrapper"><label class="control-label" for="Demo">Demo</label><div title="Demo of roles." class="ico-help"><i class="fa fa-question-circle"></i></div></div>
+                    </div>
+                    <div class="col-md-9">
+                        <input class="form-control text-box single-line" id="Demo" name="Demo" type="text" value="">
+                        <span class="field-validation-valid" data-valmsg-for="Demo" data-valmsg-replace="true"></span>
+                    </div>
+                </div>*@
+            </div>
+
+        </div>
+    </div>
+
+</div>

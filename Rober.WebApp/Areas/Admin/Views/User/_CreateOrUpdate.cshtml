@@ -1,0 +1,18 @@
+﻿@model UserModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<div class="content">
+    <div class="form-horizontal">
+        @*<div class="row">
+            <div class="col-md-12 clearfix">
+                <div class="pull-left">
+                    @await Component.InvokeAsync("SettingMode", new { modeName = "rule-advanced-mode" })
+                </div>
+            </div>
+        </div>*@
+        <jm-tabs id="rule-edit">
+            <jm-tab asp-name="tab-info" asp-title="基本信息" asp-default="true">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</jm-tab>
+        </jm-tabs>
+    </div>
+</div>

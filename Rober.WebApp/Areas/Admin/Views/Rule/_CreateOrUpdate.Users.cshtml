@@ -1,0 +1,157 @@
+﻿@model RuleModel
+@{
+    var defaultGridPageSize = 10;
+    var gridPageSizes = "10,20,50,100";
+}
+
+<div class="panel-group">
+    @if (Model.Id > 0)
+    {
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="Users-grid"></div>
+
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        var dataSource = new kendo.data.DataSource({
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@(Url.Action("ReadUsers"))?Id=@Model.Id",
+                                    type: "GET",
+                                    contentType: "application/json",
+                                    dataType: "json"
+                                },
+                                destroy: {
+                                    url: "@(Url.Action("DestroyUser"))",
+                                    type: "GET",
+                                    contentType: "application/json",
+                                    dataType: "json",
+                                    data: additionalData
+                                },
+                                parameterMap: function (options, operation) {
+                                    if (operation == "destroy")
+                                    {
+                                        return {UserId:options.Id,RuleId:@Model.Id};
+                                    }
+                                }
+                            },
+                            schema: {
+                                errors: function (response) {
+                                    if (response.Status) {
+                                        return response.Data.Errors;
+                                    } else {
+                                        return response.Code + " " + response.Message;
+                                    }
+                                },
+                                data: "Data.Data",
+                                total: "Data.Total",
+                                model: {
+                                    id: "Id",
+                                    fields: {
+                                        Id: { editable: false, nullable: false, type: "int" },
+                                        Name: { validation: { required: true } },
+                                        Published: { type: "boolean" }
+                                    }
+                                }
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            batch: false,
+                            pageSize:  @(defaultGridPageSize),
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        });
+                        var grid = $("#Users-grid").kendoGrid({
+                            dataSource: dataSource,
+                            columns: [
+                                {
+                                    field: "Id",
+                                    //headerTemplate: "<input id='mastercheckbox' type='checkbox'/>",
+                                    headerAttributes: { style: "text-align:center" },
+                                    //template: "<input type='checkbox' value='#=Id#' class='checkboxGroups'/>",
+                                    attributes: { style: "text-align:center" },
+                                    width: 50
+                                }, {
+                                    field: "UserName",
+                                    title: "账号"
+                                }, {
+                                    field: "NickName",
+                                    title: "昵称"
+                                }, {
+                                    field: "ErrorCount",
+                                    title: "错误次数"
+                                }, {
+                                    field: "LoginTime",
+                                    title: "登录时间"
+                                }, {
+                                    field: "Published",
+                                    title: "是否发布",
+                                    width: 100,
+                                    template: '# if(Published) {# <i class="fa fa-check true-icon"></i> #} else {# <i class="fa fa-close false-icon"></i> #} #'
+                                },
+                                {
+                                    command: [
+                                        { name: "destroy",text:"删除"}
+                                    ],
+                                    title: "&nbsp;", width: "100px"
+                                }
+                            ],
+                            pageable: {
+                                refresh: true,
+                                pageSizes: [@(gridPageSizes)],
+                                @await Html.PartialAsync("_GridPagerMessages")
+                            },
+                            editable: {
+                                confirmation: "确定删除?",
+                                mode: "popup"
+                            },
+                            scrollable: false
+                        });
+                    });
+                    function additionalData() {
+                        var data = {
+                            UsrId: $('#Name').val(),
+                            RuleId: @Model.Id
+                        };
+                        addAntiForgeryToken(data);
+                        return data;
+                    }
+                </script>
+            </div>
+
+            <div class="panel-footer">
+                <button type="submit" id="btnAddNewUser"
+                        onclick="javascript:OpenWindow('@(Url.Action("UserAddPopub", "Rule", new {ruleId = Model.Id, btnId = "btnRefreshUsers", formId = "rule-form"}))', 800, 800, true); return false;"
+                        class="btn btn-primary">
+                    新增用户
+                </button>
+                <input type="submit" id="btnRefreshUsers" style="display: none">
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#btnRefreshUsers').click(function () {
+                            //refresh grid
+                            var grid = $("#Users-grid").data('kendoGrid');
+                            grid.dataSource.read();
+
+                            //return false to don't reload a page
+                            return false;
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="panel panel-default">
+            <div class="panel-body">
+                SaveBeforeEdit
+            </div>
+        </div>
+    }
+</div>

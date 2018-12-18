@@ -1,0 +1,39 @@
+﻿<!-- AdminLTE Skins (choose a skin from the css/skins) -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+    <link href="/lib/adminLTE/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/fontAwesome/css/font-awesome-4.6.3.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/jquery-ui-themes/smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/kendo/2014.1.318/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/kendo/2014.1.318/kendo.default.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/kendo/2014.1.318/kendo.rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/adminLTE/AdminLTE-2.3.0.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/admin/styles.css" rel="stylesheet" type="text/css" />
+
+    <script src="/lib/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="/lib/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+    <script src="/lib/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/lib/adminLTE/app.min.js" type="text/javascript"></script>
+    <script src="/lib/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/lib/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script src="/lib/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+    <script src="/lib/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+    <script src="/js/admin.common.js" type="text/javascript"></script>
+    <script src="/lib/kendo/2014.1.318/kendo.web.min.js" type="text/javascript"></script>
+
+</head>
+<body class="hold-transition skin-blue sidebar-collapse">
+    <div class="wrapper">
+        <div class="content-wrapper">
+            @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Notifications.cshtml")
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>

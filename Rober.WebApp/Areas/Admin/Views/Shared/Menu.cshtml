@@ -1,0 +1,36 @@
+﻿@using Rober.Core.Http.Context
+@using Rober.WebApp.Framework.MenuExtensions
+@using Rober.Core.Action
+@using Rober.Action.Model.Account
+@using Rober.WebApp.Framework.Proxy
+
+@{
+
+    List<Menu> menus = new List<Menu>();
+    var sessionMenus = HttpContext.Current.Session.Get<List<Menu>>(SessionConstants.UserMenusScheme);
+    if (sessionMenus != null)
+    {
+        menus.AddRange(sessionMenus);
+    }
+    else
+    {
+        var request = MessageFactory.CreateApiRequest<UserMenuListRequest>(HttpContext.Current);
+        var _proxyAction = EngineContext.Current.Resolve<IActionProxy>();
+        if (_proxyAction.UserMenuList(request, out UserMenuListResponse response, out var responseCode))
+        {
+            if (response.Menus != null && response.Menus.Any())
+            {
+                menus.AddRange(response.Menus);
+                HttpContext.Current.Session.Set<List<Menu>>(SessionConstants.UserMenusScheme, menus);
+            }
+        }
+    }
+    var menuNodes = menus.Convert();
+}
+
+<ul class="sidebar-menu">
+    @foreach (var item in menuNodes.Where(x => x.IsMenu && x.Published))
+    {
+        @await Html.PartialAsync("_MenuItem", item)
+    }
+</ul>

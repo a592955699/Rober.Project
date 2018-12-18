@@ -1,0 +1,36 @@
+﻿@model ScheduleModel
+@{
+    var scheduleCategoryName = Model.ScheduleCategory.ScheduleCategoryName();
+    //page title
+    ViewBag.Title = "编辑"+ scheduleCategoryName;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName(scheduleCategoryName);
+}
+
+<form asp-controller="Schedule" asp-action="Edit" asp-route-Id="@Model.Id" asp-route-ScheduleCategory="@((int)Model.ScheduleCategory)" method="post">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            编辑@(scheduleCategoryName) - @Model.Title
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a asp-action="Index" asp-route-ScheduleCategory="@((int)Model.ScheduleCategory)">返回列表</a>
+            </small>
+        </h1>
+        <div class="pull-right">
+            <button type="submit" name="save" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                保存
+            </button>
+            <button type="submit" name="save-continue" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                保存并继续编辑
+            </button>
+            <span id="blogpost-delete" class="btn bg-red">
+                <i class="fa fa-trash-o"></i>
+                删除
+            </span>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdate", Model)
+</form>
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="blogpost-delete" />

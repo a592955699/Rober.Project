@@ -1,0 +1,188 @@
+﻿@{
+    //sidebar
+    const string hideSidebarAttributeName = "HideSidebar";
+    var hideSidebar = HttpContext.Current.Session.Get<User>(SessionConstants.UserScheme).GetAttribute<bool>(hideSidebarAttributeName);
+}
+
+<!-- AdminLTE Skins (choose a skin from the css/skins) -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard / nopCommerce administration</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link href="/lib/adminLTE/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/typeahead/typeahead.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/fontAwesome/css/font-awesome-4.6.3.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/jquery-ui-themes/smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/kendo/2014.1.318/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/kendo/2014.1.318/kendo.default.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/kendo/2014.1.318/kendo.rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/adminLTE/AdminLTE-2.3.0.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/admin/styles.css" rel="stylesheet" type="text/css" />
+    <link href="/lib/ionicons/css/ionicons-2.0.1.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="/lib/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="/lib/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+    <script src="/lib/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/lib/adminLTE/app.min.js" type="text/javascript"></script>
+    <script src="/lib/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/lib/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script src="/lib/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+    <script src="/lib/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+    <script src="/lib/typeahead/typeahead.bundle.min.js" type="text/javascript"></script>
+    <script src="/js/admin.common.js" type="text/javascript"></script>
+    <script src="/js/admin.navigation.js" type="text/javascript"></script>
+    <script src="/js/admin.search.js" type="text/javascript"></script>
+    <script src="/lib/kendo/2014.1.318/kendo.web.min.js" type="text/javascript"></script>
+    <script src="/lib/chartjs/Chart.min.js" type="text/javascript"></script>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini @if (hideSidebar) 
+                                                    {<text>sidebar-collapse</text>}">
+    <div class="throbber">
+        <div class="curtain">
+        </div>
+        <div class="curtain-content">
+            <div>
+                <h1 class="throbber-header">Wait...</h1>
+                <p>
+                    <img src="/css/admin/images/throbber-synchronizing.gif" alt="" />
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="ajaxBusy">
+        <span>&nbsp;</span>
+    </div>
+    <div class="wrapper">
+        <div class="main-header">
+            <a href="/Admin" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"></span>
+            </a>
+            <div class="navbar navbar-static-top" role="navigation">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">&nbsp;</span>
+                </a>
+
+                <div class="navbar-custom-menu">
+
+                    <ul class="nav navbar-nav">
+                        <li>
+
+                        </li>
+                        <li class="account-info">
+                           @(HttpContext.Current.Session.Get<User>(SessionConstants.UserScheme)?.UserName)
+                        </li>
+                        <li>
+                            <a href="/Account/Signout">Logout</a>
+                        </li>
+                        <li>
+
+                        </li>
+                        @*<li>
+                            <a href="/">Public store</a>
+                        </li>*@
+                        <li class="dropdown">
+                            <a href="#" data-toggle="dropdown"><i class="fa fa-gears"></i></a>
+                            <ul class="maintenance-menu dropdown-menu bg-light-blue" role="menu">
+                                <li>
+                                    <form action="/Admin/Common/ClearCache" method="post">
+                                        <input name="returnurl" type="hidden" value="/Admin">
+                                        <button type="submit" class="bg-light-blue">
+                                            <span>Clear cache</span>
+                                        </button>
+                                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8CTM1mWuMTRAjQ3hrCvwsn-ci8zSa-wm7AR6Q7euTkob8kLXqYtBOHon1xI8zrO0gRleSaT8ZrydDMXfXDk7xOpRVHKc4dC3xSmPgbx5H4pom-mlvr5TS7GFLY9NL6ixdk9lK95IpXYSNp8FzorA0bY" />
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="/Admin/Common/RestartApplication" method="post">
+                                        <input name="returnurl" type="hidden" value="/Admin">
+                                        <button id="restart-application" type="submit" class="bg-light-blue">
+                                            <span>Restart application</span>
+                                        </button>
+                                        <script type="text/javascript">
+                                            $(document).ready(function () {
+                                                $("#restart-application").click(function (e) {
+                                                    showThrobber('Restarting the application...');
+                                                });
+                                            });
+                                        </script>
+                                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8CTM1mWuMTRAjQ3hrCvwsn-ci8zSa-wm7AR6Q7euTkob8kLXqYtBOHon1xI8zrO0gRleSaT8ZrydDMXfXDk7xOpRVHKc4dC3xSmPgbx5H4pom-mlvr5TS7GFLY9NL6ixdk9lK95IpXYSNp8FzorA0bY" />
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        <div class="main-sidebar">
+            <div class="sidebar">
+
+                <div class="sidebar-form">
+                    <div id="search-box">
+                        <input type="text" class="form-control admin-search-box typeahead" placeholder="Search">
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        Admin.Search.init();
+                    });
+                </script>
+
+                @await Html.PartialAsync("Menu")
+            </div>
+        </div>
+        <div class="content-wrapper">
+            @await Html.PartialAsync("Notifications")
+            <div>
+                @RenderBody()
+            </div>
+
+        </div>
+
+        <div class="main-footer clearfix">
+            <div class="pull-left">
+                Powered by <a href="https://www.nopcommerce.com/?utm_source=admin-panel&utm_medium=footer&utm_campaign=admin-panel" target="_blank">nopCommerce</a>
+            </div>
+            <div class="pull-right hidden-xs">
+                <b>nopCommerce version 4.00</b>
+            </div>
+            <div class="text-center">
+                Tuesday, August 21, 2018 8:58 PM
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var AdminLTEOptions = {
+            boxWidgetOptions: {
+                boxWidgetIcons: {
+                    collapse: 'fa-minus',
+                    open: 'fa-plus'
+                }
+            }
+        };
+    </script>
+
+
+    <a id="backTop" class="btn btn-back-top bg-teal"></a>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#backTop').backTop();
+
+            $('a.sidebar-toggle').on('click', function () {
+                var collapsed = $('body').hasClass('sidebar-collapse');
+                saveUserPreferences('/Admin/Preferences/SavePreference', 'HideSidebar', collapsed);
+            });
+        });
+    </script>
+</body>
+</html>

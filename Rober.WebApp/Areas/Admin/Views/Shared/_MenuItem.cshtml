@@ -1,0 +1,60 @@
+﻿@model MenuNode
+@{
+    var isActive = Model.ContainsSystemName(Html.GetActiveMenuItemSystemName());
+    var supportRtl = false;
+}
+@if (!string.IsNullOrEmpty(Model.Link))
+{
+    <li @(isActive ? Html.Raw("class=\"active current-active-item\"") : null)>
+        <a href="@Model.Link" class="menu-item-link" @(Model.OpenUrlInNewTab ? Html.Raw(" target=\"_blank\"") : null)>
+            @if (!string.IsNullOrEmpty(Model.Icon))
+            {
+                <text>
+                <i class="fa @Url.Content(Model.Icon)"></i>
+                </text>
+            }
+            else
+            {
+                <i class="fa fa-gears"></i> 
+            }
+            <span class="menu-item-title">@Model.Name</span>
+        </a>
+    </li>
+}
+else
+{
+    var childNodes = Model.ChildNodes.Where(x => x.Published && x.IsMenu).ToList();
+    <li class="treeview @(isActive ? Html.Raw("active current-active-item") : null)">
+        <a href="#">
+            @if (!string.IsNullOrEmpty(Model.Icon))
+            {
+                <text>
+                    <i class="fa @Url.Content(Model.Icon)"></i>
+                </text>
+            }
+            else
+            {
+                <i class="fa fa-gears"></i>
+            }
+            <span>@Model.Name</span>
+            @if (supportRtl && childNodes.Any())
+            {
+                <i class="fa fa-angle-right pull-right"></i>
+            }
+            else if (!supportRtl && childNodes.Any())
+            {
+                <i class="fa fa-angle-left pull-right"></i>
+            }
+        </a>
+      
+        @if (childNodes.Any())
+        {
+            <ul class="treeview-menu">
+                @foreach (var childItem in childNodes)
+                {
+                    @await Html.PartialAsync("_MenuItem", childItem)
+                }
+            </ul>
+        }
+    </li>
+}
